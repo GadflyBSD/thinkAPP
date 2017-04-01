@@ -58,7 +58,7 @@ Full Example
 	
 *Default: a close button will be added automagically*
 
-**secure** - Define if the cookie transmission requires secure protocal (https)
+**secure** - Define if the cookie transmission requires secure protocol (https)
 
 	secure: true
    
