@@ -1,0 +1,42 @@
+<div class="card">
+	<div class="item item-divider">
+		<h4>{{title}}</h4>
+	</div>
+	<div class="item item-text-wrap">
+		<form name="theForm" novalidate="novalidate">
+			<div class="padding color-a">设输入登录密码，和手机号码完成身份验证</div>
+			<div class="list">
+				<div class="item">
+					<label class="item item-input item-icon-right">
+						<i class="icon"
+						   ng-class="{true: 'ion-close color-assertive', false: 'ion-checkmark color-balanced'}[theForm.password.$invalid ]"></i>
+						<input type="password" name="password" ng-model="change.password" placeholder="请输入登录密码"
+						       ng-minlength="6" ng-maxlength="20" required>
+					</label>
+				</div>
+				<div class="item">
+					<label class="item-input item-icon-right">
+						<i class="icon"
+						   ng-class="{true: 'ion-close color-assertive', false: 'ion-checkmark color-balanced'}[theForm.mobile.$invalid]"></i>
+						<input type="tel" name="mobile" ng-model="change.mobile" ng-pattern="/^1[1|3|4|5|7|8][0-9]\d{8}$/"
+						       placeholder="请填写手机号码" required>
+					</label>
+				</div>
+				<div class="item">
+					<label class="item-input w-p6 item-icon-right">
+						<i class="icon" ng-class="{true: 'ion-close color-assertive', false: 'ion-checkmark color-balanced'}[theForm.sms_code.$invalid]"></i>
+						<input type="tel" name="sms_code" ng-model="change.sms_code" ng-pattern="/^\d{6}$/" placeholder="请填写验证码" required>
+					</label>
+					<div class="w-p4">
+						<button class="button button-small button-block button-dark sendSms" ng-click="sendSms()" ng-disabled="theForm.mobile.$invalid">
+							获取验证码
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="padding">
+				<button class="button button-full button-energized" ng-click="submit()" ng-disabled="!theForm.$valid">重新绑定手机</button>
+			</div>
+		</form>
+	</div>
+</div>

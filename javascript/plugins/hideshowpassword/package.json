@@ -1,0 +1,94 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "hideshowpassword",
+        "scope": null,
+        "escapedName": "hideshowpassword",
+        "name": "hideshowpassword",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/gadflybsd/PhpstormProjects"
+    ]
+  ],
+  "_from": "hideshowpassword@latest",
+  "_id": "hideshowpassword@2.0.10",
+  "_inCache": true,
+  "_location": "/hideshowpassword",
+  "_nodeVersion": "4.0.0",
+  "_npmUser": {
+    "name": "cloudfour",
+    "email": "info@cloudfour.com"
+  },
+  "_npmVersion": "3.5.0",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "hideshowpassword",
+    "scope": null,
+    "escapedName": "hideshowpassword",
+    "name": "hideshowpassword",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/hideshowpassword/-/hideshowpassword-2.0.10.tgz",
+  "_shasum": "13aaf81b5040a45ec993810bc42e50e5a82af906",
+  "_shrinkwrap": null,
+  "_spec": "hideshowpassword",
+  "_where": "/Users/gadflybsd/PhpstormProjects",
+  "author": {
+    "name": "Cloud Four"
+  },
+  "bugs": {
+    "url": "https://github.com/cloudfour/hideShowPassword/issues"
+  },
+  "dependencies": {
+    "jquery": ">=1.11"
+  },
+  "description": "Easily reveal or hide password field contents via JavaScript or a nifty inner toggle button. Supports touch quite nicely!",
+  "devDependencies": {
+    "uglify-js": "^2.4.17"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "13aaf81b5040a45ec993810bc42e50e5a82af906",
+    "tarball": "https://registry.npmjs.org/hideshowpassword/-/hideshowpassword-2.0.10.tgz"
+  },
+  "gitHead": "7e3cab68df731706b5311df764b6d9334e53b1a0",
+  "homepage": "http://cloudfour.github.io/hideShowPassword/",
+  "keywords": [
+    "form",
+    "forms",
+    "input",
+    "inputs",
+    "password",
+    "visibility",
+    "jquery-plugin",
+    "ecosystem:jquery"
+  ],
+  "license": "MIT",
+  "main": "hideShowPassword.js",
+  "maintainers": [
+    {
+      "name": "cloudfour",
+      "email": "info@cloudfour.com"
+    }
+  ],
+  "name": "hideshowpassword",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cloudfour/hideShowPassword.git"
+  },
+  "scripts": {
+    "minify": "uglifyjs hideShowPassword.js -o hideShowPassword.min.js"
+  },
+  "version": "2.0.10"
+}

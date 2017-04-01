@@ -1,0 +1,15 @@
+<div class="form-group">
+	<label class="col-sm-3 control-label">{{label}}</label>
+	<div class="col-sm-5 form-inline listItem">
+		<div class="itemDom" style="padding-top: 10px;" ng-repeat="item in model">
+			<div class="form-group">
+				<input type="text" name="{{params.ckey.name}}" class="form-control" ng-model="model[$index].ckey" placeholder="{{params.ckey.label}}">
+			</div>
+			<div class="form-group">
+				<input type="text" name="{{params.label.name}}" class="form-control" ng-model="model[$index].label" placeholder="{{params.label.label}}">
+			</div>
+			<button type="button" class="btn btn-default" ng-click="plusButton($index)">{{($index==0)?'新增':'删除'}}</button>
+		</div>
+		<p class="help-block">{{tips}}</p>
+	</div>
+</div>

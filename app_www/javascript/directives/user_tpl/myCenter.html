@@ -1,0 +1,55 @@
+<div class="list list-normal">
+	<a ng-href="#/app/set-headimg" class="item item-icon-right">
+		更改头像
+		<span class="right-element color-a">去设置</span>
+		<i class="icon ion-ios-arrow-right"></i>
+	</a>
+	<a ng-href="#/app/set-nickname" class="item item-icon-right">
+		昵称
+		<span class="right-element color-a">去设置</span>
+		<i class="icon ion-ios-arrow-right"></i>
+	</a>
+</div>
+<div class="list list-normal">
+	<!--<a href="#/app/realname" class="item item-icon-right" >
+		&lt;!&ndash; <i class="icon ion-ios-analytics-outline"></i> &ndash;&gt;
+		实名认证
+		<span class="right-element color-a">{{user.realname}}</span>
+		<i class="icon ion-ios-arrow-right"></i>
+	</a>-->
+	<a class="item item-icon-right" href="#/app/bind-mobile">
+		<!-- <i class="icon ion-ios-cog-outline"></i> -->
+		绑定手机
+		<span class="right-element color-a">1365879452</span>
+		<i class="icon ion-ios-arrow-right"></i>
+	</a>
+	<!-- 绑定 微信 or 银行卡 -->
+	<div class="item item-icon-right">
+		绑定支付宝
+		<a ng-href="#" class="right-element color-a">立即绑定</a>
+		<i class="icon ion-ios-arrow-right"></i>
+	</div>
+	<div class="item item-icon-right" href="#/app/bindweichat">
+		绑定微信
+		<a ng-href="#" class="right-element color-positive" ng-show="user.is_bindweixin == '1'">已获得微信授权</a>
+		<a ng-href="#" class="right-element color-a" ng-show="user.is_bindweixin == '0'" ng-click="weixin()">立即绑定</a>
+		<i class="icon ion-ios-arrow-right"></i>
+	</div>
+</div>
+<div class="list list-normal">
+	<a ng-href="#/app/set-password" class="item item-icon-right">
+		设置修改密码
+		<span class="right-element color-a">去设置</span>
+		<i class="icon ion-ios-arrow-right"></i>
+	</a>
+	<a ng-href="#/app/set-gesture-password" class="item item-icon-right">
+		设置修改手势密码
+		<span class="right-element color-a">去设置</span>
+		<i class="icon ion-ios-arrow-right"></i>
+	</a>
+</div>
+<div class="list">
+	<a class="item D-center color-assertive" ng-click="logout()">
+		安全退出
+	</a>
+</div>

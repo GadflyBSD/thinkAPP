@@ -1,0 +1,12 @@
+.dropdownjs::after {
+  right: 5px;
+  top: 3px;
+  font-size: 25px;
+  position: absolute;
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  content: "\e5c5";
+  pointer-events: none;
+  color: #757575;
+}

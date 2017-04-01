@@ -1,0 +1,8 @@
+<div class="form-group has-feedback" ng-class="{true: 'has-error', false: 'has-success'}[invalid]">
+	<label class="control-label col-sm-3">{{label}}</label>
+	<div class="col-sm-5">
+		<input type="{{type}}" name="{{name}}" ng-model="model" class="form-control" placeholder="请填写{{label}}" ng-change="changes()" required />
+		<span class="fa form-control-feedback" ng-class="{true: 'fa-close', false: 'fa-check'}[invalid]" style="line-height: 64px;"></span>
+		<p class="help-block">{{tips}}</p>
+	</div>
+</div>

@@ -1,0 +1,12 @@
+<div class="form-group">
+	<label class="col-sm-3 control-label">{{label}}</label>
+	<div class="col-sm-5">
+		<div class="input-group" ng-hide="required">
+			<select class="form-control" name="{{name}}" ng-model="model" style="width: 450px;" placeholder="请选择一个任务分类" readonly></select>
+			<span class="fa fa-caret-square-o-down form-control-feedback" style="top:10px;"></span>
+			<input type="hidden" name="model" ng-model="model" />
+			<div class="ztree ztreeSelect" style="padding: 2px;border: 1px solid #ccc;border-radius: 3px;width: 450px; padding-top: 40px;"></div>
+		</div>
+		<p class="help-block">{{tips}}</p>
+	</div>
+</div>

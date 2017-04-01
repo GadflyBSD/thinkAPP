@@ -1,0 +1,26 @@
+<div class="form-group">
+	<label class="col-sm-3 control-label">{{label}}</label>
+	<div class="col-sm-5">
+		<div class="input-group has-feedback" ng-class="{true: 'has-error', false: 'has-success'}[invalid]" ng-if="required">
+			<span class="input-group-addon">
+				<i class="fa fa-cogs"></i>
+			</span>
+			<input type="text" name="icon" ng-model="model" class="form-control" placeholder="请填写或选择{{label}}Class样式名" required />
+			<span class="fa fa-close form-control-feedback" style="right: 82px;"
+			      ng-class="{true: 'fa-close', false: 'fa-check'}[invalid]"  ng-if="required"></span>
+			<div class="input-group-addon">
+				<a href="#" ng-click="openIconModel()">选择Icon</a>
+			</div>
+		</div>
+		<div class="input-group" ng-hide="required">
+			<span class="input-group-addon">
+				<i class="fa fa-cogs"></i>
+			</span>
+			<input type="text" name="icon" ng-model="model" class="form-control" placeholder="请填写或选择{{label}}Class样式名" />
+			<div class="input-group-addon">
+				<a href="#" ng-click="openIconModel()">选择Icon</a>
+			</div>
+		</div>
+		<p class="help-block">{{tips}}</p>
+	</div>
+</div>
