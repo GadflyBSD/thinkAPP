@@ -29,7 +29,7 @@ CREATE TABLE `app_router` (
   `status` INTEGER DEFAULT '1'
 );
 EOF;
-	
+
 	protected $tabs_menu = <<<EOF
 <ion-side-menus enable-menu-with-back-views="false">
 	<ion-side-menu-content ng-if="menu.tabs.length>0">
@@ -70,7 +70,7 @@ EOF;
 	</ion-content>
 </ion-view>
 EOF;
-	
+
 	protected $template_page = <<<EOF
 <ion-view view-title="{{bar_title}}">
 	<ion-content class="page">
@@ -81,7 +81,7 @@ EOF;
 	</ion-content>
 </ion-view>
 EOF;
-	
+
 	protected $template_tabs_page = <<<EOF
 <ion-view view-title="{{bar_title}}" hide-nav-bar="true">
 	<ionic-header type="menuSearchPopover"></ionic-header>
@@ -93,7 +93,7 @@ EOF;
 	</ion-content>
 </ion-view>
 EOF;
-	
+
 	protected $template_menu_page = <<<EOF
 <ion-view view-title="{{bar_title}}" hide-nav-bar="true">
 	<ion-header-bar class="bar-dark bar-positive">
@@ -120,7 +120,7 @@ angular.module('[APP_MODULE]').controller('[CONTROLLER]', function([scope]) {
 	[CONTENT]
 });
 EOF;
-	
+
 	protected $router = <<<EOF
 var app = angular.module('starter.router', []);
 app.config(function([stateProvider], [urlRouterProvider]) {
@@ -171,7 +171,7 @@ app.config(function([stateProvider], [urlRouterProvider]) {
 	[stateList]
 });
 EOF;
-	
+
 	protected $stateList = <<<EOF
 	
 	// [label] 路由配置项
@@ -200,7 +200,7 @@ EOF;
 				<ion-nav-view name="[views]"></ion-nav-view>
 			</ion-tab>
 EOF;
-	
+
 	protected $ion_left_menu = <<<EOF
 
 				<ion-item menu-close ui-sref="tab.[ckey]">
@@ -215,7 +215,7 @@ EOF;
 				</ion-item>
 EOF;
 
-	
+
 	/**
 	 * App端路由列表
 	 * @return mixed
@@ -288,7 +288,7 @@ EOF;
 			'msg'		=> 'APP路由详情数据获取成功！'
 		));
 	}
-	
+
 	public function getRouterSelect(){
 		$header = D('AppHeader')->getLists();
 		$function = D('AppFunction')->getLists();
@@ -298,7 +298,7 @@ EOF;
 			'function'  => $function['data'],
 		);
 	}
-	
+
 	public function getRouterInfo($param){
 		$return = $this->getInfo($param);
 		$select = $this->getRouterSelect();
@@ -340,7 +340,7 @@ EOF;
 			}
 		}
 	}
-	
+
 	public function appBuild($param = true){
 		$field = 'label, ckey, level, views, icon, params, template, ctrl_file, controller, header, header_param, function, function_param';
 		$data = $this->curd(array(
@@ -351,11 +351,11 @@ EOF;
 		//$this->createSqlite($data['data']);
 		$json = $this->buildJson('app_router.json', 'app_router', $data['data'], $param);
 		if($json['type'] == 'Error') return $json;
-		$sql = $this->backupSql('app-'.date("Y-m-d").'.sql', array('gadfly_app_router', 'gadfly_app_header', 'gadfly_app_function'), $param);
+		$sql = $this->backupSql('app-'.date("Y-m-d").'.sql', array('gadfly_app_router', 'gadfly_app_header', 'gadfly_app_function'), true);
 		if($sql['type'] == 'Error') return $sql;
-		$tabs = $this->buildTabs($data['data'], null, $param);
+		$tabs = $this->buildTabs($data['data'], null, true);
 		if($tabs['type'] == 'Error') return $tabs;
-		$router = $this->buildRouter($data['data'], null, $param);
+		$router = $this->buildRouter($data['data'], null, true);
 		if($router['type'] == 'Error') return $router;
 		foreach ($data['data'] as $val) {
 			$temp = $this->buildTemplate($val, $param);
@@ -364,29 +364,17 @@ EOF;
 			if($ctrl['type'] == 'Error') return $ctrl;
 		}
 	}
-	
+
 	protected function createSqlite($data){
 		$sqlite = $this->db(1, 'APP_SQLITE');
 		$sqlite->execute('DROP TABLE IF EXISTS `app_router`;');
 		$sqlite->execute($this->createTable);
 		$sqlite->table('app_router')->addAll($data);
 	}
-	
+
 	protected function backupSql($file, $table, $reCreate=false){
 		$files = DOC_ROOT.C('APP_CONF.path').C('APP_CONF.db_path').$file;
-		if(!fileExists($files) || $reCreate){
-			if(is_array($table)){
-				$content = '';
-				foreach ($table AS $val){
-					$content .= $this->backupTableStruct($val);
-					$content .= $this->backupTableRecord($val);
-				}
-			}else{
-				$content = $this->backupTableStruct($table);
-				$content .= $this->backupTableRecord($table);
-			}
-			return $this->_writeFile($files, $content, '数据库备份');
-		}
+		return $this->backupMySQL($files, $table, $reCreate);
 	}
 
 	protected function buildJson($file, $table, $data, $reCreate=false){
@@ -442,7 +430,7 @@ EOF;
 			return $this->_writeFile($files, $content, '模板');
 		}
 	}
-	
+
 	protected function buildController($data, $reCreate=false){
 		$ctrl_file = ($data['level'] == 'tabs')?$data['ctrl_file']:$data['views'].'/'.$data['ctrl_file'];
 		$files = DOC_ROOT.C('APP_CONF.path').C('APP_CONF.js_path').'controller/'.$ctrl_file;
@@ -543,12 +531,4 @@ EOF;
 		return $this->where($where)->count();
 	}
 
-	private function _writeFile($files, $content, $msg){
-		$dir = dirname($files);
-		if(!file_exists($dir)) mkdirs($dir, 0777, true);
-		if(file_put_contents($files, $content))
-			return array('type' => 'Success', 'msg' => '成功生成'.$msg.'文件!', 'files' => $files);
-		else
-			return array('type' => 'Error', 'msg' => '生成'.$msg.'文件出错!', 'files' => $files);
-	}
 }

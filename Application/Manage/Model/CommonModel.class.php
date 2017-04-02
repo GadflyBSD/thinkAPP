@@ -56,7 +56,7 @@ class CommonModel extends Model{
 	protected function uuid2uid($uuid){
 		return M('MustachUser')->where('uuid="'.$uuid.'"')->getField('id');
 	}
-	
+
 	protected function uuid2mobile($uuid){
 		return M('MustachUser')->where('uuid="'.$uuid.'"')->getField('mobile');
 	}
@@ -251,6 +251,22 @@ class CommonModel extends Model{
 		}
 	}
 
+	public function backupMySQL($files, $table, $reCreate=false){
+		if(!fileExists($files) || $reCreate){
+			if(is_array($table)){
+				$content = '';
+				foreach ($table AS $val){
+					$content .= $this->backupTableStruct($val);
+					$content .= $this->backupTableRecord($val);
+				}
+			}else{
+				$content = $this->backupTableStruct($table);
+				$content .= $this->backupTableRecord($table);
+			}
+			return $this->_writeFile($files, $content, '数据库备份');
+		}
+	}
+
 	/**
 	 * 验证能力平台短信验证码是否正确
 	 * @param $param  array   所需验证的手机号码和短信验证码数组形如: array('mobile' => 13355556666, 'code' => 123456, 'action' => 'register')
@@ -269,7 +285,7 @@ class CommonModel extends Model{
 			return false;
 		}
 	}
-	
+
 	private function _validatorPassword($password, $mobile){
 		$sql = "SELECT COUNT(*) AS tp FROM `onethink_mustach_user` WHERE `mobile` = '".$mobile."' AND `password` = password('".$password."') LIMIT 1";
 		$count = M()->query($sql);
@@ -334,10 +350,10 @@ class CommonModel extends Model{
 						$return = array('type' => 'Error', 'msg' => '向数据库新增数据记录时发生错误：'.$model->getError());
 				}else{
 					if($model->add($param['data'])){
-                        $return = array('type' => 'Success', 'msg' => $curd['msg'], 'ac' => 'Insert');
-                    }else{
-                        $return = array('type' => 'Error', 'msg' => '向数据库新增数据记录时发生错误：'.$model->getError());
-                    }
+						$return = array('type' => 'Success', 'msg' => $curd['msg'], 'ac' => 'Insert');
+					}else{
+						$return = array('type' => 'Error', 'msg' => '向数据库新增数据记录时发生错误：'.$model->getError());
+					}
 				}
 				break;
 			case 'save':
@@ -454,7 +470,7 @@ class CommonModel extends Model{
 		curl_close($ch);
 		return $results;
 	}
-	
+
 	protected $tableSql = <<<EOF
 
 --
@@ -466,7 +482,7 @@ CREATE TABLE `[table]`(
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 EOF;
-	
+
 	protected function backupTableStruct($table){
 		$result=M()->query('show columns from '.$table);
 		$rsCount=count($result);
@@ -494,7 +510,7 @@ EOF;
 		}
 		return str_replace(array('[table]', '[fields]'), array($table, $fields), $this->tableSql);
 	}
-	
+
 	protected function backupTableRecord($table){
 		$rs=M()->query('select * from '.$table);
 		if(count($rs)<=0){
@@ -515,5 +531,14 @@ EOF;
 			}
 			return str_replace(',)',')',$sql);
 		}
+	}
+
+	protected function _writeFile($files, $content, $msg){
+		$dir = dirname($files);
+		if(!file_exists($dir)) mkdirs($dir, 0777, true);
+		if(file_put_contents($files, $content))
+			return array('type' => 'Success', 'msg' => '成功生成'.$msg.'文件!', 'files' => $files);
+		else
+			return array('type' => 'Error', 'msg' => '生成'.$msg.'文件出错!', 'files' => $files);
 	}
 }

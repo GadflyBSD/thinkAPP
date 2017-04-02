@@ -31,4 +31,10 @@ class UnitController extends Controller{
 	public function test(){
 		dump(D('System')->generateDataStructure());
 	}
+	
+	public function mysql2sqlite(){
+		$files = DOC_ROOT.'SQL/position.sql';
+		$table = array('position', 'position_city', 'position_county', 'position_provice', 'position_town', 'position_village');
+		dump(D('Common')->backupMySQL($files, $table, true));
+	}
 }
