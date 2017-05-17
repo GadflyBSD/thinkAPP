@@ -519,7 +519,38 @@ app.factory('imgPicker', function($cordovaCamera, $cordovaBarcodeScanner, $cordo
 			}, false);
 		},
 		/**
-		 * .上传多张照片
+		 * 上传单张证件并进行识别
+		 * @param param
+		 * @param text
+		 * @param options
+		 * @param callback
+		 */
+		upload_ocr: function(param, text, options, callback){
+			document.addEventListener('deviceready', function () {
+				ngSwal.progress({text: text, width: 0});
+				$cordovaFileTransfer.upload(configs.url.upload, param, {params: options}).then(
+					function (result) {
+						angular.element('div.showSweetAlert').find('span.progressText').text(text);
+						angular.element('div.showSweetAlert').find('div.progress-bar').css('width', '0%');
+						var response =  (result.response)?eval('(' + result.response + ')'):result;
+						ngSwal.close();
+						if(typeof(callback) == 'function') callback(response);
+					}, function (error) {
+						error.type = error;
+						ngSwal.alert({title: '图片上传出错啦!', text: error.info, type: 'error'}, function(){
+							ngSwal.close();
+							if(typeof(callback) == 'function') callback(error);
+						});
+					}, function (progress) {
+						var width = Math.floor(parseInt(progress.loaded) / parseInt(progress.total) * 10000)/100;
+						angular.element('div.showSweetAlert').find('div.progress-bar').css('width', width+'%');
+						if(width = 100) angular.element('div.showSweetAlert').find('span.progressText').text('正在识别证件');
+					}
+				);
+			}, false);
+		},
+		/**
+		 * 上传多张照片
 		 * @param param
 		 * @param text
 		 * @param callback
