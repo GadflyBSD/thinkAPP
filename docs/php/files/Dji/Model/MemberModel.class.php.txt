@@ -1,0 +1,59 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: gadflybsd
+ * Date: 2017/2/8
+ * Time: 11:20
+ */
+
+namespace Dji\Model;
+
+class MemberModel extends CommonModel{
+	public function lists(){
+		return $this->select();
+	}
+	
+	public function register($param){
+		$validate = array(
+			array('mobile', 'require', '手机号码必须填写！'),
+			array('mobile', '', '手机号码已经存在！', 0, 'unique', 1),
+			array('identity', 'require', '用户身份必须填写！'),
+		);
+		$data = array(
+			'uuid'		=> isset($param['data']['uuid'])?$param['data']['uuid']:array('exp', 'uuid()'),
+			'mobile'	=> $param['data']['mobile'],
+			'identity'	=> $param['data']['identity'],
+			'password'	=> array('exp', "password('".$param['data']['password']."')"),
+		);
+		$curd = $this->curd(array(
+			'validate'	=> $validate,
+			'type'		=> 'add',
+			'data'		=> $data,
+			'msg'		=> 'APP用户数据添加成功！'
+		));
+		if($curd['type'] == 'Success')
+			return array_merge($curd, array('localStorage' => $this->where('mobile="'.$data['mobile'].'"')->field('uuid, mobile, identity')->find()));
+		else
+			return $curd;
+	}
+	
+	public function changePassword($param){
+		$validator = $this->validators(array(
+			array('value' => $param['data']['mobile'], 'type' => 'require'),
+			array('value' => $param['data']['oldpassword'], 'type' => 'isPassword', 'rule' => $param['mobile']),
+			array('value' => $param['data']['newpassword'], 'type' => 'require'),
+			array('value' => $param['data']['repassword'], 'type' => 'require'),
+		));
+		if($validator['type'] = 'Error'){
+			return $validator;
+		}else{
+			$data['password'] = array('exp', "password('".$param['data']['newpassword']."')");
+			return $this->curd(array(
+				'type'		=> 'save',
+				'where'		=> 'mobile="'.$param['data']['mobile'].'"',
+				'data'		=> $data,
+				'msg'		=> 'APP用户密码修改成功！'
+			));
+		}
+	}
+}

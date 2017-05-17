@@ -1,0 +1,53 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: gadflybsd
+ * Date: 2017/3/13
+ * Time: 11:23
+ */
+
+namespace Manage\Controller;
+use Think\Controller;
+
+class UnitController extends Controller{
+	public function yml2json(){
+		Vendor('spyc.Spyc');
+		$Data = spyc_load_file(__ROOT__.'json/icons.yml');
+		foreach ($Data['icons'] AS $val){
+			foreach ($val['categories'] AS $vo){
+				$icons[str_replace(' ', '', $vo)]['label'] = $vo;
+				$icons[str_replace(' ', '', $vo)]['icons'][] = $val['id'];
+			}
+		}
+		$file =new \Think\Storage\Driver\File();
+		echo json_encode($icons);
+		echo $file->put(DOC_ROOT.'/json/icons.json', json_encode($icons));
+	}
+	
+	public function path(){
+		echo DOC_ROOT;
+	}
+	
+	public function test(){
+		dump(D('System')->generateDataStructure());
+	}
+	
+	public function sqlite(){
+		$file = DOC_ROOT.C('APP_CONF.path').C('APP_CONF.json_path').'position.json';
+		$table = array(
+			'position_provice'  => true, 
+			'position_city'     => true, 
+			'position_county'   => true,
+			'position_town'     => false,
+			'position_village'  => false,
+			'app_user'          => false,       // app用户表
+			'app_user_log'      => false,       // app用户操作记录
+			'app_doorlock'      => false,       // 1.3 设备管理/门锁管理
+			'app_netcontroller' => false,       // 1.2 通讯设置/网络控制器
+			'app_org'           => false,       // 1.1 机构管理
+			'app_door_open_user'=> false,       // 1.4 开门人登记
+			'app_key'           => false,       // 1.5 钥匙登记
+		);
+		dump(D('Position')->backupMySqlToSqliteForJson2($file, $table));
+	}
+}

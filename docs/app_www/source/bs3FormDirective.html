@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='directives-bootstrap3Form'>/**
+</span> * # bootstrap3 表单指令
+ * Created by gadflybsd on 2017/3/10.
+ * @class directives.bootstrap3Form
+ * 
+ */
+var starterApp = angular.module(&#39;starter.directives&#39;, []);
+<span id='directives-bootstrap3Form-method-bs3Input'>/**
+</span> * # bootstrap3 表单输入框指令
+ * @method bs3Input
+ * 
+ * **页面调用方法**
+ *
+ *      @example
+ * &lt;bs3-input label=&quot;测试用表单元素&quot; tips=&quot;该路由在同级中的排序序号!&quot; type=&quot;text&quot; name=&quot;test&quot; ng-model=&quot;form.test&quot;
+ *      icons=&quot;fa-star&quot;                  // 所指定的表单元数图标，不指定则不按照图标形式展示
+ *      required=&quot;true&quot;                  // 是否需要验证，可以和其他表单元素进行组合验证， 例如：equired=&quot;form.level==&#39;tabs&#39;&quot;
+ *      pattern=&quot;pattern&quot;                // 表单验证正则
+ *      invalid=&quot;theForm.test.$invalid&quot;  // 表单验证字段
+ *  &gt;&lt;/bs3-input&gt;
+ */
+starterApp.directive(&#39;bs3Input&#39;, function () {
+	return {
+		restict: &#39;EA&#39;,
+		replace: true,
+		scope: {
+			label: &#39;@&#39;,
+			tips: &#39;@&#39;,
+			name: &#39;@&#39;,
+			type: &#39;@&#39;,
+			pattern: &#39;@&#39;,
+			model: &#39;=ngModel&#39;,
+			invalid: &#39;=invalid&#39;,
+			changes: &#39;&amp;&#39;,
+		},
+		templateUrl: function(ele, attr){
+			if(attr.icon){
+				if(attr.invalid)
+					return &#39;tpl/bs3-form/iconInputRequired.html&#39;;
+				else
+					return &#39;tpl/bs3-form/iconInput.html&#39;;
+			}else{
+				if(attr.invalid)
+					return &#39;tpl/bs3-form/inputRequired.html&#39;;
+				else
+					return &#39;tpl/bs3-form/input.html&#39;;
+			}
+			return &#39;tpl/bs3-form/input.html&#39;;
+		},
+		link: function(scope, ele){
+			$(&#39;input&#39;, ele).change(function(){
+				scope.$apply(function(){
+					scope.model = $(&#39;input&#39;, ele).val();
+				});
+			})
+		},
+		controller: function($scope){
+			if(!$scope.hasOwnProperty(&#39;tips&#39;) || angular.isUndefined($scope.tips) || $scope.tips===null)
+				$scope.tips = $scope.label;
+			/*if($scope.hasOwnProperty(&#39;value&#39;) || !angular.isUndefined($scope.value) || $scope.value!==null || $scope.value)
+			 $scope.model = $scope.default + $scope.value;*/
+		}
+	}
+});
+<span id='directives-bootstrap3Form-method-bs3Button'>/**
+</span> * # bootstrap 3 按钮指令
+ * Created by gadflybsd on 2017/3/10.
+ * @method bs3Button
+ *
+ * **页面调用方法**
+ */
+starterApp.directive(&#39;bs3Button&#39;, function () {
+	return {
+		restict: &#39;EA&#39;,
+		replace: true,
+		transclude: true,
+		template: function(tEle, tAttr){
+			return &#39;&lt;div class=&quot;form-group&quot;&gt;&lt;label class=&quot;control-label col-md-3&quot;&gt;&#39;+tAttr.label+&#39;&lt;/label&gt;&#39; +
+				&#39;&lt;div class=&quot;col-md-5&quot;&gt;&lt;div class=&quot;btn-group btn-group-devided&quot; ng-transclude&gt;&lt;/div&gt;&#39;+
+				&#39;&lt;p class=&quot;help-block&quot;&gt;&#39;+tAttr.tips+&#39;&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&#39;;
+		}
+	}
+});
+<span id='directives-bootstrap3Form-method-bs3Select'>/**
+</span> * # bootstrap 3 下啦选择框指令
+ * Created by gadflybsd on 2017/3/10.
+ * @method bs3Select
+ *
+ * **页面调用方法**
+ */
+starterApp.directive(&#39;bs3Select&#39;, function ($ocLazyLoad) {
+	return {
+		restict: &#39;EA&#39;,
+		replace: true,
+		transclude: true,
+		template: function(tEle, tAttr){
+			return &#39;&lt;div class=&quot;form-group&quot;&gt;&lt;label class=&quot;control-label col-md-3&quot;&gt;&#39;+tAttr.label+&#39;&lt;/label&gt;&#39; +
+				&#39;&lt;div class=&quot;col-md-5&quot;&gt;&lt;div ng-transclude&gt;&lt;/div&gt;&#39;+
+				&#39;&lt;p class=&quot;help-block&quot;&gt;&#39;+tAttr.tips+&#39;&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&#39;;
+		},
+		link: function(scope, element, attrs){
+			element.hide();
+			$ocLazyLoad.load([&#39;javascript/plugins/bootstrap-select/css/bootstrap-select.min.css&#39;,
+				&#39;javascript/plugins/bootstrap-select/js/bootstrap-select.min.js&#39;]).then(function(){
+				element.find(&#39;select&#39;).selectpicker();
+				element.show();
+			})
+		}
+	}
+});
+<span id='directives-bootstrap3Form-method-bs3Switch'>/**
+</span> * # bootstrap 3 滑动开关指令
+ * Created by gadflybsd on 2017/3/10.
+ * @method bs3Switch
+ *
+ * **页面调用方法**
+ */
+starterApp.directive(&#39;bs3Switch&#39;, function ($ocLazyLoad) {
+	return {
+		restict: &#39;EA&#39;,
+		replace: true,
+		transclude: true,
+		template: function(tEle, tAttr){
+			return &#39;&lt;div class=&quot;form-group&quot;&gt;&lt;label class=&quot;control-label col-md-3&quot;&gt;&#39;+tAttr.label+&#39;&lt;/label&gt;&#39; +
+				&#39;&lt;div class=&quot;col-md-5&quot;&gt;&lt;div ng-transclude&gt;&lt;/div&gt;&#39;+
+				&#39;&lt;p class=&quot;help-block&quot;&gt;&#39;+tAttr.tips+&#39;&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&#39;;
+		},
+		link: function(scope, element, attrs){
+			element.hide();
+			$ocLazyLoad.load([&#39;javascript/plugins/bootstrap-switch/css/bootstrap-switch.min.css&#39;,
+				&#39;javascript/plugins/bootstrap-switch/js/bootstrap-switch.min.js&#39;]).then(function(){
+				element.find(&#39;input&#39;).bootstrapSwitch();
+				element.show();
+			})
+		}
+	}
+});
+<span id='directives-bootstrap3Form-method-bs3Password'>/**
+</span> * # bootstrap 3 密码输入框指令
+ * Created by gadflybsd on 2017/3/10.
+ * @method bs3Password
+ *
+ * **页面调用方法**
+ */
+starterApp.directive(&#39;bs3Password&#39;, function ($ocLazyLoad) {
+	return {
+		restict: &#39;EA&#39;,
+		replace: true,
+		transclude: true,
+		template: function(tEle, tAttr){
+			return &#39;&lt;div class=&quot;form-group&quot;&gt;&lt;label class=&quot;control-label col-md-3&quot;&gt;&#39;+tAttr.label+&#39;&lt;/label&gt;&#39; +
+				&#39;&lt;div class=&quot;col-md-5&quot;&gt;&lt;div ng-transclude&gt;&lt;/div&gt;&#39;+
+				&#39;&lt;p class=&quot;help-block&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;show-password&quot;&gt;&lt;label for=&quot;show-password&quot;&gt;显示密码&lt;/label&gt; &#39;+tAttr.tips+&#39;&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&#39;;
+		},
+		link: function(scope, element, attrs){
+			element.hide();
+			element.find(&#39;input:password&#39;).addClass(&#39;form-control&#39;);
+			var pwstrength = {
+				ui: {
+					showVerdictsInsideProgressBar: true,
+					verdicts: [&quot;非常弱&quot;,&quot;一般&quot;,&quot;中等&quot;,&quot;强&quot;,&quot;非常强&quot;]
+				}
+			}
+			$ocLazyLoad.load([&#39;javascript/plugins/hideshowpassword/hideshowpassword.js&#39;,
+				&#39;javascript/plugins/bootstrap-pwstrength/pwstrength-bootstrap.min.js&#39;]).then(function(){
+				element.find(&#39;input:password&#39;).pwstrength(pwstrength);
+				element.find(&#39;div.progress&#39;).css(&#39;margin-bottom&#39;, &#39;2px&#39;);
+				var password = element.find(&#39;input:password&#39;);
+				$(&#39;#show-password&#39;).change(function(){
+					password.hideShowPassword($(&#39;#show-password&#39;).prop(&#39;checked&#39;));
+				});
+				element.show();
+			})
+		}
+	}
+});
+<span id='directives-bootstrap3Form-method-bs3Tags'>/**
+</span> * # bootstrap 3 标签输入框指令
+ * Created by gadflybsd on 2017/3/10.
+ * @method bs3Tags
+ *
+ * **页面调用方法**
+ */
+starterApp.directive(&#39;bs3Tags&#39;, function ($ocLazyLoad) {
+	return {
+		restict: &#39;EA&#39;,
+		replace: true,
+		transclude: true,
+		scope: {
+			model: &#39;=ngModel&#39;
+		},
+		template: function (tEle, tAttr) {
+			return &#39;&lt;div class=&quot;form-group&quot;&gt;&lt;label class=&quot;control-label col-md-3&quot;&gt;&#39;+tAttr.label+&#39;&lt;/label&gt;&#39; +
+				&#39;&lt;div class=&quot;col-md-5&quot;&gt;&lt;input type=&quot;text&quot; name=&quot;tags&quot; class=&quot;form-control&quot; placeholder=&quot;请在此处填写一个标签后回车，再添加其他标签！&quot;&gt;&#39; +
+				&#39;&lt;p class=&quot;help-block&quot;&gt;&#39;+tAttr.tips+&#39;&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&#39;;
+		},
+		link: function(scope, element, attrs){
+			if (!angular.isArray(scope.model))scope.model = [];
+			var tags = element.find(&#39;input&#39;)
+			element.hide();
+			$ocLazyLoad.load([&#39;javascript/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css&#39;,
+				&#39;javascript/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js&#39;]).then(function(){
+				tags.tagsinput();
+				for (var i = 0; i &lt; scope.model.length; i++) {
+					tags.tagsinput(&#39;add&#39;, scope.model[i]);
+				}
+				tags.on(&#39;itemAdded&#39;, function(event) {
+					if (scope.model.indexOf(event.item) === -1)
+						scope.model.push(event.item);
+				});
+				tags.on(&#39;itemRemoved&#39;, function(event) {
+					var idx = scope.model.indexOf(event.item);
+					if (idx !== -1)
+						scope.model.splice(idx, 1);
+				});
+				var prev = scope.model.slice();
+				scope.$watch(&quot;model&quot;, function() {
+					var added = scope.model.filter(function(i) {return prev.indexOf(i) === -1;}),
+						removed = prev.filter(function(i) {return scope.model.indexOf(i) === -1;}),
+						i;
+
+					prev = scope.model.slice();
+
+					// Remove tags no longer in binded model
+					for (i = 0; i &lt; removed.length; i++) {
+						tags.tagsinput(&#39;remove&#39;, removed[i]);
+					}
+
+					// Refresh remaining tags
+					tags.tagsinput(&#39;refresh&#39;);
+
+					// Add new items in model as tags
+					for (i = 0; i &lt; added.length; i++) {
+						tags.tagsinput(&#39;add&#39;, added[i]);
+					}
+				}, true);
+				element.show();
+			});
+		}
+	}
+});
+<span id='directives-bootstrap3Form-method-bs3IconSelect'>/**
+</span> * # bootstrap 3 图标选择框指令
+ * Created by gadflybsd on 2017/3/10.
+ * @method bs3IconSelect
+ *
+ * **页面调用方法**
+ */
+starterApp.directive(&#39;bs3IconSelect&#39;, function () {
+	return {
+		restict: &#39;EA&#39;,
+		replace: true,
+		transclude: true,
+		scope: {
+			label: &#39;@&#39;,
+			tips: &#39;@&#39;,
+			invalid: &#39;=invalid&#39;,
+			required: &#39;=required&#39;,
+			model: &#39;=ngModel&#39;
+		},
+		templateUrl: function(){
+			return &#39;tpl/bs3-form/iconSelect.html&#39;
+		},
+		controller: function($scope, $uibModal, xhr){
+			$scope.tips = (angular.isUndefined($scope.tips) || $scope.tips === null)?&#39;从 Font Awesome 4.7 图标集中选择一个图标样式&#39;:$scope.tips;
+			$scope.openIconModel = function(){
+				var modalInstance =$uibModal.open({
+					animation: true,
+					ariaLabelledBy: &#39;modal-title&#39;,
+					ariaDescribedBy: &#39;modal-body&#39;,
+					templateUrl: function(){
+						return &#39;tpl/bs3-form/iconModalContent.html&#39;
+					},
+					controller: function($scope, $uibModalInstance){
+						$scope.loading = true;
+						xhr.service(&#39;get&#39;,{action: &#39;Restful&#39;, module: &#39;getFontAwesome&#39;}, function(resp){
+							$scope.icons = resp;
+							$scope.loading = false;
+							$scope.selectedIcon = function(dom){
+								$uibModalInstance.close(&#39;fa-&#39;+dom);
+							}
+							$scope.ok = function () {
+								$uibModalInstance.close();
+							};
+
+							$scope.cancel = function () {
+								$uibModalInstance.dismiss(&#39;cancel&#39;);
+							};
+						});
+					}
+				});
+				modalInstance.result.then(function (selectedItem) {
+					$scope.model = selectedItem;
+				});
+			}
+		}
+	}
+});
+<span id='directives-bootstrap3Form-method-bs3TreeSelect'>/**
+</span> * # bootstrap 3 树形下拉选择框指令
+ * Created by gadflybsd on 2017/3/10.
+ * @method bs3TreeSelect
+ *
+ * **页面调用方法**
+ */
+starterApp.directive(&#39;bs3TreeSelect&#39;, function ($ocLazyLoad) {
+	return {
+		restict: &#39;EA&#39;,
+		replace: true,
+		transclude: true,
+		scope: {
+			label: &#39;@&#39;,
+			tips: &#39;@&#39;,
+			name: &#39;@&#39;,
+			nodes: &#39;=nodes&#39;,
+			invalid: &#39;=invalid&#39;,
+			required: &#39;=required&#39;,
+			model: &#39;=ngModel&#39;,
+			category: &#39;=&#39;
+		},
+		templateUrl: function(ele, attr){
+			if(attr.invalid)
+				return &#39;tpl/bs3-form/treeSelectRequired.html&#39;;
+			else
+				return &#39;tpl/bs3-form/treeSelect.html&#39;;
+		},
+		link: function(scope, element, attrs){
+			element.hide();
+			$ocLazyLoad.load([&#39;javascript/plugins/zTree_v3-master/css/metroStyle/metroStyle.css&#39;,
+				&#39;javascript/plugins/zTree_v3-master/js/jquery.ztree.core.js&#39;]).then(function(){
+				var setting = {
+					data: {
+						simpleData: {
+							enable: true,
+							idKey: &quot;id&quot;,
+							pIdKey: &quot;pId&quot;,
+							rootPId: 0
+						}
+					},
+					callback: {
+						onClick: function(event, treeId, treeNode){
+							scope.$apply(function(){
+								scope.model = treeNode.id;
+								scope.category =treeNode.ckey;
+							});
+							$(&#39;input[type=text]&#39;, element).val(treeNode.name);
+							$(&quot;div.ztreeSelect&quot;, element).hide();
+						}
+					}
+				};
+				$.fn.zTree.init($(&quot;div.ztreeSelect&quot;, element), setting, scope.nodes);
+				var isShow = false;
+				function ztreeShowHide(isShow){
+					if(isShow)
+						$(&quot;div.ztreeSelect&quot;, element).show();
+					else
+						$(&quot;div.ztreeSelect&quot;, element).hide();
+				}
+				ztreeShowHide(isShow);
+				$(&#39;input[type=text]&#39;, element).on(&#39;click&#39;, function(){
+					isShow = !isShow;
+					ztreeShowHide(isShow);
+				});
+				$(document).mouseup(function(e){
+					if($(e.target).parent(&quot;#big_map&quot;).length==0){
+						$(&quot;div.ztreeSelect&quot;, element).hide();
+					}
+				});
+				element.show();
+			})
+		},
+		controller: function($scope){
+			if(!$scope.hasOwnProperty(&#39;tips&#39;) || angular.isUndefined($scope.tips) || $scope.tips===null)
+				$scope.tips = $scope.label;
+		}
+	}
+});
+<span id='directives-bootstrap3Form-method-bs3PlusInput'>/**
+</span> * # bootstrap 3 一个加减输入框指令
+ * Created by gadflybsd on 2017/3/10.
+ * @method bs3PlusInput
+ *
+ * **页面调用方法**
+ */
+starterApp.directive(&#39;bs3PlusInput&#39;, function(){
+	return {
+		restict: &#39;EA&#39;,
+		replace: true,
+		transclude: true,
+		scope: {
+			label: &#39;@&#39;,
+			tips: &#39;@&#39;,
+			name: &#39;@&#39;,
+			model: &#39;=ngModel&#39;
+		},
+		templateUrl: function (ele, attr) {
+			return &#39;tpl/bs3-form/plusInput.html&#39;;
+		},
+		link: function (scope, element, attrs) {
+			var plusHtml = &#39;&lt;div class=&quot;input-group itemDom&quot; style=&quot;padding-top:10px;&quot;&gt;&lt;input type=&quot;text&quot; name=&quot;{{name}}&quot; class=&quot;form-control&quot; placeholder=&quot;请填写&#39;+scope.label+&#39;&quot; /&gt;&#39;+
+					&#39;&lt;div class=&quot;input-group-addon&quot;&gt;&lt;a class=&quot;removeItem&quot;&gt;删除&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&#39;;
+			function changeValue(){
+				var value = new Array;
+				$(&#39;input[type=text]&#39;, element).each(function(i, dom){
+					value.push($(dom).val());
+				});
+				scope.$apply(function(){
+					scope.model = value;
+				});
+			}
+			function changeEvent(){
+				$(&#39;.removeItem&#39;, element).on(&#39;click&#39;, function(){
+					$(this).closest(&#39;div.itemDom&#39;).remove();
+					changeValue();
+				});
+				$(&#39;input[type=text]&#39;, element).change(function () {
+					changeValue()
+				});
+			}
+			$(&#39;.addItem&#39;, element).on(&#39;click&#39;, function(){
+				$(&#39;.listItem&gt;.itemDom:last&#39;, element).after(plusHtml);
+				changeEvent();
+			});
+			changeEvent();
+		}
+	}
+});
+<span id='directives-bootstrap3Form-method-bs3PlusTwoInput'>/**
+</span> * # bootstrap 3 两个加减输入框指令
+ * Created by gadflybsd on 2017/3/10.
+ * @method bs3PlusTwoInput
+ *
+ * **页面调用方法**
+ */
+starterApp.directive(&#39;bs3PlusTwoInput&#39;, function(){
+	return {
+		restict: &#39;EA&#39;,
+		replace: true,
+		transclude: true,
+		scope: {
+			label: &#39;@&#39;,
+			tips: &#39;@&#39;,
+			params: &#39;=&#39;,
+			value: &#39;=&#39;,
+			model: &#39;=ngModel&#39;
+		},
+		templateUrl: function (ele, attr) {
+			return &#39;tpl/bs3-form/plusTwoInput.html&#39;;
+		},
+		controller: function($scope){
+			$scope.plusButton = function(i){
+				if(i==0){
+					$scope.model.push({ckey: &#39;&#39;, label: &#39;&#39;})
+				}else {
+					for (var key = 0; key &lt; $scope.model.length; key++) {
+						if (key == i) {
+							$scope.model.splice(key, 1);
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+});
+<span id='directives-bootstrap3Form-method-bs3SubmitButton'>/**
+</span> * # bootstrap 3 提交按钮指令
+ * Created by gadflybsd on 2017/3/10.
+ * @method bs3SubmitButton
+ *
+ * **页面调用方法**
+ */
+starterApp.directive(&#39;bs3SubmitButton&#39;, function() {
+	return {
+		restict: &#39;EA&#39;,
+		replace: true,
+		scope: {
+			submit: &#39;&amp;&#39;,
+			model: &#39;=ngModel&#39;,
+			invalid: &#39;=invalid&#39;,
+			ac: &#39;=&#39;,
+			module: &#39;=&#39;,
+			pk: &#39;=&#39;,
+			back: &#39;=&#39;
+		},
+		templateUrl: function (ele, attr) {
+			return &#39;tpl/bs3-form/submitButton.html&#39;;
+		},
+		controller: function ($scope, $state, xhr) {
+			$scope.submitForm = function(){
+				if(typeof $scope.model == &#39;object&#39; &amp;&amp; !angular.isUndefined($scope.ac) &amp;&amp; !angular.isUndefined($scope.module) &amp;&amp; !angular.isUndefined($scope.pk)){
+					var back = (angular.isUndefined($scope.back) || $scope.back === null)?&#39;home&#39;:$scope.back;
+					var method = ($scope.pk == &#39;add&#39;)?&#39;post&#39;:&#39;put&#39;;
+					xhr.service(method, {model: $scope.ac, module: $scope.module, pk: $scope.pk, data: $scope.model}, function(){
+						$state.go(back);
+					})
+				}else{
+					$scope.submit();
+				}
+			}
+		}
+	}
+});</pre>
+</body>
+</html>

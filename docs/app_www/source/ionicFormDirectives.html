@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='directives-ionicForm'>/**
+</span> * # Ionic表单元素指令
+ * Created by gadflybsd on 2017/3/26.
+ * @class directives.ionicForm
+ */
+var starterApp = angular.module(&#39;starter.directives&#39;, []);
+<span id='directives-ionicForm-method-ionicInput'>/**
+</span> * # 表单input输入框
+ * @method ionicInput
+ */
+starterApp.directive(&#39;ionicInput&#39;, function() {
+	&quot;表单input输入框&quot;;
+	return {
+		restict: &#39;EA&#39;,
+		replace: true,
+		scope: {
+			label: &#39;@&#39;,
+			name: &#39;@&#39;,
+			type: &#39;@&#39;,
+			pattern: &#39;@&#39;,
+			model: &#39;=ngModel&#39;,
+			invalid: &#39;=invalid&#39;,
+			changes: &#39;&amp;&#39;,
+		},
+		templateUrl: function (ele, attr) {
+			switch (attr.type){
+				case &#39;mobile&#39;:
+					return &#39;form_tpl/input_mobile.html&#39;;
+				case &#39;text&#39;:
+					return &#39;form_tpl/input_text.html&#39;;
+			}
+		}
+	}
+});</pre>
+</body>
+</html>

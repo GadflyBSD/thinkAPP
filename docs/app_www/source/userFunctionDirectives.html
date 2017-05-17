@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='directives-userFunction'>/**
+</span> * # 用户前端指令
+ * Created by gadflybsd on 2017/3/12.
+ * @class directives.userFunction
+ */
+var starterApp = angular.module(&#39;starter.directives&#39;, []);
+<span id='directives-userFunction-method-registerPage'>/**
+</span> * # 用户注册页面指令
+ * @method registerPage
+ */
+starterApp.directive(&#39;registerPage&#39;,function(){
+	return {
+		restrict: &#39;AEC&#39;,
+		scope: {
+			back: &#39;=back&#39;,
+			model: &#39;=ngModel&#39;,
+			title: &#39;=title&#39;
+		},
+		transclude: true,
+		templateUrl: function(){
+			return &#39;javascript/directives/user_tpl/register.html&#39;;
+		},
+		controller: function($rootScope, $scope, $element, $window, unit, userLogic){
+			$scope.model = {}
+			$scope.title = $rootScope.$$childHead.$title;
+			$scope.weixin = function(){
+				userLogic.weixinLogin();
+			}
+			$scope.sendSms = function(){
+				var sendButton = $element.find(&#39;button.sendSms&#39;);
+				userLogic.sendSms($scope.model.mobile, sendButton, &#39;register&#39;);
+			}
+			$scope.submit = function(){
+				if(!unit.isEmptyObject($window.sessionStorage.weixin)) $scope.model.weixin = JSON.parse($window.sessionStorage.weixin);
+				userLogic.register($scope.model);
+			}
+		}
+	}
+});
+<span id='directives-userFunction-method-loginPage'>/**
+</span> * # 用户登录页面指令
+ * @method loginPage
+ */
+starterApp.directive(&#39;loginPage&#39;,function(){
+	return {
+		restrict: &#39;AEC&#39;,
+		scope: {
+			back: &#39;=back&#39;,
+			model: &#39;=ngModel&#39;,
+			title: &#39;=title&#39;
+		},
+		transclude: true,
+		templateUrl: function(){
+			return &#39;javascript/directives/user_tpl/login.html&#39;;
+		},
+		controller: function($rootScope, $scope, $window, configs, userLogic, unit){
+			$scope.model = {}
+			$scope.title = $rootScope.$$childHead.$title;
+			$scope.submit = function(){
+				if(!unit.isEmptyObject($window.sessionStorage.weixin)) $scope.model.weixin = JSON.parse($window.sessionStorage.weixin);
+				userLogic.login($scope.model);
+			};
+			$scope.weixin = function(){
+				userLogic.weixinLogin();
+			}
+		}
+	}
+});
+<span id='directives-userFunction-method-realnamePage'>/**
+</span> * # 实名认证指令，
+ * @method realnamePage
+ * **页面调用方法**
+ * 
+ *      @example
+ *     &lt;realname-dom model=&quot;&#39;MustachUser&#39;&quot; module=&quot;&#39;realname&#39;&quot; back=&quot;&#39;app.my&#39;&quot; form=&quot;form&quot; title=&quot;&#39;实名认证标题&#39;&quot;&gt;
+ *          &lt;!-- 额外新增的表单字段开始 --&gt;
+ *          &lt;label class=&quot;item-input&quot;&gt;
+ *              &lt;input type=&quot;tel&quot; name=&quot;nickname&quot; ng-model=&quot;form.realname&quot; placeholder=&quot;请填写真实姓名&quot;&gt;
+ *          &lt;/label&gt;
+ *          &lt;!-- 额外新增的表单字段结束 --&gt;
+ *     &lt;/realname-dom&gt;
+ */
+starterApp.directive(&#39;realnamePage&#39;,function(){
+	return {
+		restrict: &#39;AEC&#39;,
+		scope: {
+			back: &#39;=back&#39;,
+			model: &#39;=ngModel&#39;,
+			title: &#39;=title&#39;
+		},
+		transclude: true,
+		templateUrl: function(){
+			return &#39;javascript/directives/user_tpl/realname.html&#39;;
+		},
+		controller: function($rootScope, imgPickerService, $scope, $window, userLogic){
+			userLogic.userState(&#39;login&#39;, function(user){
+				$scope.title = $rootScope.$$childHead.$title;
+				$scope.model = {
+					realname: user.realname,
+					idcard: user.idcard
+				};
+				$scope.idcard1 = user.idcard_url_1;
+				$scope.idcard2 = user.idcard_url_2;
+				$scope.setIdcard1 = function(){
+					imgPickerService.camera(function(res){
+						$scope.idcard1 = res;
+					})
+				};
+				$scope.setIdcard2 = function(){
+					imgPickerService.camera(function(res){
+						$scope.idcard2 = res;
+					})
+				};
+				$scope.submit = function(){
+					userLogic.realname($scope.model, [$scope.idcard1, $scope.idcard2]);
+				}
+			}, true);
+		}
+	}
+});
+<span id='directives-userFunction-method-setHeadimgPage'>/**
+</span> * # 设定头像指令，
+ * @method setHeadimgPage
+ * **页面调用方法**
+ * 
+ *      @example
+ *     &lt;set-headimg-dom model=&quot;&#39;MustachUser&#39;&quot; module=&quot;&#39;setHeadimg&#39;&quot; back=&quot;&#39;app.my&#39;&quot; form=&quot;form&quot; title=&quot;&#39;设定头像标题&#39;&quot;&gt;
+ *         &lt;!-- 额外新增的表单字段开始 --&gt;
+ *         &lt;label class=&quot;item-input&quot;&gt;
+ *             &lt;input type=&quot;tel&quot; name=&quot;nickname&quot; ng-model=&quot;form.realname&quot; placeholder=&quot;请填写真实姓名&quot;&gt;
+ *         &lt;/label&gt;
+ *         &lt;!-- 额外新增的表单字段结束 --&gt;
+ *     &lt;/set-headimg-dom&gt;
+ */
+starterApp.directive(&#39;setHeadimgPage&#39;,function(){
+	return {
+		restrict: &#39;AEC&#39;,
+		scope: {
+			back: &#39;=back&#39;,
+			title: &#39;=title&#39;
+		},
+		transclude: true,
+		templateUrl: function(){
+			return &#39;javascript/directives/user_tpl/headimg.html&#39;;
+		},
+		controller: function($rootScope, $scope, userLogic){
+			userLogic.userState(&#39;login&#39;, function(user){
+				$scope.title = $rootScope.$$childHead.$title;
+				$scope.headimg = user.headimg;
+				$scope.setHeadimg = function () {
+					userLogic.headimg([$scope.headimg]);
+				}
+			}, true);
+		}
+	}
+});
+<span id='directives-userFunction-method-setPasswordPage'>/**
+</span> * # 设置用户密码页面指令
+ * @method setPasswordPage
+ */
+starterApp.directive(&#39;setPasswordPage&#39;,function(){
+	return {
+		restrict: &#39;AEC&#39;,
+		scope: {
+			back: &#39;=back&#39;,
+			model: &#39;=ngModel&#39;,
+			title: &#39;=title&#39;
+		},
+		transclude: true,
+		templateUrl: function(){
+			return &#39;javascript/directives/user_tpl/password.html&#39;;
+		},
+		controller: function($rootScope, $scope, $state, $element, userLogic){
+			userLogic.userState(&#39;login&#39;, function(user){
+				$scope.model = {mobile: user.mobile};
+				$scope.title = $rootScope.$$childHead.$title;
+				$scope.sendSms = function(){
+					var sendButton = $element.find(&#39;button.sendSms&#39;);
+					userLogic.sendSms($scope.model.mobile, sendButton, &#39;setPassword&#39;);
+				}
+				$scope.submit = function(){
+					userLogic.setPassword($scope.model);
+				}
+			}, true);
+		}
+	}
+});
+<span id='directives-userFunction-method-forgotPasswordPage'>/**
+</span> * # 找回用户密码页面指令
+ * @method forgotPasswordPage
+ */
+starterApp.directive(&#39;forgotPasswordPage&#39;,function(){
+	return {
+		restrict: &#39;AEC&#39;,
+		scope: {
+			back: &#39;=back&#39;,
+			model: &#39;=ngModel&#39;,
+			mobile: &#39;=&#39;,
+			title: &#39;=title&#39;
+		},
+		transclude: true,
+		templateUrl: function(){
+			return &#39;javascript/directives/user_tpl/forgot-password.html&#39;;
+		},
+		controller: function($rootScope, $scope, $element, userLogic){
+			userLogic.userState(&#39;login&#39;, function(){
+				$scope.model = {};
+				$scope.title = $rootScope.$$childHead.$title;
+				$scope.sendSms = function(){
+					var sendButton = $element.find(&#39;button.sendSms&#39;);
+					userLogic.sendSms($scope.model.mobile, sendButton, &#39;forgotPassword&#39;);
+				}
+				$scope.submit = function(){
+					userLogic.forgotPassword($scope.model);
+				}
+			}, true);
+		}
+	}
+});
+<span id='directives-userFunction-method-setMobilePage'>/**
+</span> * # 设置用户手机页面指令
+ * @method setMobilePage
+ */
+starterApp.directive(&#39;setMobilePage&#39;,function(){
+	return {
+		restrict: &#39;AEC&#39;,
+		scope: {
+			back: &#39;=back&#39;,
+			model: &#39;=model&#39;,
+			module: &#39;=module&#39;,
+			title: &#39;=title&#39;
+		},
+		transclude: true,
+		templateUrl: function(){
+			return &#39;javascript/directives/user_tpl/mobile.html&#39;;
+		},
+		controller: function($rootScope, $scope, $element, $state, userLogic){
+			userLogic.userState(&#39;login&#39;, function(user){
+				$scope.model = {mobile: user.mobile};
+				$scope.title = $rootScope.$$childHead.$title;
+				$scope.sendSms = function(){
+					var sendButton = $element.find(&#39;button.sendSms&#39;);
+					userLogic.sendSms($scope.model.mobile, sendButton, &#39;forgotPassword&#39;);
+				}
+				$scope.submit = function(){
+					userLogic.setMobile($scope.model);
+				}
+			}, true);
+		}
+	}
+});
+<span id='directives-userFunction-method-setNicknamePage'>/**
+</span> * # 设置用户昵称页面指令
+ * @method setNicknamePage
+ */
+starterApp.directive(&#39;setNicknamePage&#39;,function(){
+	return {
+		restrict: &#39;AEC&#39;,
+		scope: {
+			back: &#39;=back&#39;,
+			title: &#39;=title&#39;
+		},
+		transclude: true,
+		templateUrl: function(){
+			return &#39;javascript/directives/user_tpl/nickname.html&#39;;
+		},
+		controller: function($rootScope, $scope, $state, userLogic){
+			xhr.userState(&#39;login&#39;, function(user){
+				$scope.nickname = user.nickname;
+				$scope.title = $rootScope.$$childHead.$title;
+				$scope.submit = function(){
+					userLogic.setNickname($scope.nickname);
+				}
+			}, true);
+		}
+	}
+});
+<span id='directives-userFunction-method-myProfileDom'>/**
+</span> * # 设定头像指令，
+ * @method myProfileDom
+ * **页面调用方法**
+ *      
+ *      @example
+ *      &lt;set-headimg-dom model=&quot;&#39;MustachUser&#39;&quot; module=&quot;&#39;setHeadimg&#39;&quot; back=&quot;&#39;app.my&#39;&quot; form=&quot;form&quot; title=&quot;&#39;设定头像标题&#39;&quot;&gt;
+ *          &lt;!-- 额外新增的表单字段开始 --&gt;
+ *              &lt;label class=&quot;item-input&quot;&gt;
+ *                  &lt;input type=&quot;tel&quot; name=&quot;nickname&quot; ng-model=&quot;form.realname&quot; placeholder=&quot;请填写真实姓名&quot;&gt;
+ *              &lt;/label&gt;
+ *          &lt;!-- 额外新增的表单字段结束 --&gt;
+ *      &lt;/set-headimg-dom&gt;
+ */
+starterApp.directive(&#39;myProfileDom&#39;,function(){
+	return {
+		restrict: &#39;AEC&#39;,
+		scope: {
+			back: &#39;=back&#39;,
+			user: &#39;=user&#39;,
+			state: &#39;=state&#39;,
+			title: &#39;=title&#39;
+		},
+		transclude: true,
+		templateUrl: function(){
+			return &#39;javascript/directives/user_tpl/myProfile.html&#39;;
+		},
+		controller: function($scope, $rootScope, userLogic){
+			$scope.title = $rootScope.$$childHead.$title;
+			$scope.weixin = function(){
+				userLogic.bindWeixin();
+			};
+			var back = (angular.isUndefined($scope.back) || $scope.back === null)?&#39;app.home&#39;:$scope.back;
+			$scope.logout = function(){
+				userLogic.logout(function(user, identity){
+					$scope.state = identity;
+					$scope.user = user;
+				});
+			}
+		}
+	}
+});
+<span id='directives-userFunction-method-myCenterDom'>/**
+</span> * # 用户管理中心页面指令
+ * @method myCenterDom
+ */
+starterApp.directive(&#39;myCenterDom&#39;,function(){
+	return {
+		restrict: &#39;AEC&#39;,
+		scope: {
+			back: &#39;=back&#39;,
+			user: &#39;=user&#39;,
+			state: &#39;=state&#39;,
+			title: &#39;=title&#39;
+		},
+		transclude: true,
+		templateUrl: function(){
+			return &#39;javascript/directives/user_tpl/myCenter.html&#39;;
+		},
+		controller: function($rootScope, $scope, $state, $window, userLogic){
+			userLogic.userState(&#39;login&#39;, function(user){
+				$scope.title = $rootScope.$$childHead.$title;
+				$scope.user = user;
+				$scope.weixin = function(){
+					userLogic.bindWeixin();
+				};
+				$scope.logout = function(){
+					userLogic.logout(function(user, identity){
+						$scope.state = identity;
+						$scope.user = user;
+					});
+				}
+			}, true);
+		}
+	}
+});</pre>
+</body>
+</html>

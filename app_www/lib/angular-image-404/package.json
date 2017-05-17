@@ -1,0 +1,97 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "angular-image-404",
+        "scope": null,
+        "escapedName": "angular-image-404",
+        "name": "angular-image-404",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/gadflybsd/PhpstormProjects"
+    ]
+  ],
+  "_from": "angular-image-404@latest",
+  "_id": "angular-image-404@0.1.6",
+  "_inCache": true,
+  "_location": "/angular-image-404",
+  "_nodeVersion": "5.7.1",
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/angular-image-404-0.1.6.tgz_1460413728888_0.7541721602901816"
+  },
+  "_npmUser": {
+    "name": "stiekel",
+    "email": "histkc@gmail.com"
+  },
+  "_npmVersion": "3.6.0",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "angular-image-404",
+    "scope": null,
+    "escapedName": "angular-image-404",
+    "name": "angular-image-404",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/angular-image-404/-/angular-image-404-0.1.6.tgz",
+  "_shasum": "58becee0c0c8610a6bd03f9a01c76b4d8cdc39da",
+  "_shrinkwrap": null,
+  "_spec": "angular-image-404",
+  "_where": "/Users/gadflybsd/PhpstormProjects",
+  "author": {
+    "name": "stiekel"
+  },
+  "bugs": {
+    "url": "https://github.com/stiekel/angular-image-404/issues"
+  },
+  "dependencies": {},
+  "description": "AngualrJS directive that shows a fallback image when img element can not show picture correct",
+  "devDependencies": {
+    "angular": "^1.4.8",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-jade": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.1",
+    "gulp-webserver": "^0.9.1"
+  },
+  "directories": {
+    "example": "example"
+  },
+  "dist": {
+    "shasum": "58becee0c0c8610a6bd03f9a01c76b4d8cdc39da",
+    "tarball": "https://registry.npmjs.org/angular-image-404/-/angular-image-404-0.1.6.tgz"
+  },
+  "gitHead": "5b867eadb4072dc18b8715337bf22a40099c6609",
+  "homepage": "https://github.com/stiekel/angular-image-404#readme",
+  "keywords": [
+    "angular"
+  ],
+  "license": "MIT",
+  "main": "gulpfile.js",
+  "maintainers": [
+    {
+      "name": "stiekel",
+      "email": "histkc@gmail.com"
+    }
+  ],
+  "name": "angular-image-404",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stiekel/angular-image-404.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.1.6"
+}

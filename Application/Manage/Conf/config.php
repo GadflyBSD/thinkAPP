@@ -1,0 +1,33 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: gadflybsd
+ * Date: 2017/2/8
+ * Time: 10:23
+ */
+return array(
+    //'配置项'=>'配置值'
+    'DB_TYPE'			=> 'mysql', 			// 数据库类型
+    'DB_HOST'			=> 'localhost',      	// 服务器地址
+    'DB_NAME'			=> 'gadfly', 			// 数据库名
+    'DB_USER'			=> 'gadfly', 			// 用户名
+    'DB_PWD'			=> 'gadfly',  		    // 密码
+    'DB_PORT'			=> '3306', 				// 端口
+    'DB_PREFIX'			=> 'gadfly_',			// 数据库表前缀
+    'DB_FIELDS_CACHE'	=> FALSE,				// 关闭字段缓存
+	
+	'APP_SQLITE'    => array(
+		'DB_TYPE'       => 'sqlite',
+		'DB_NAME'       => 'app_www/db/app_ionic.db',
+		'DB_PREFIX'     => 'app_'
+	),
+	
+	'APP_CONF'  => array(
+		'module'    => 'starter',
+		'path'      => '/app_www/',
+		'js_path'   => 'javascript/',
+		'temp_path' => 'templates/',
+		'json_path' => 'json/',
+		'db_path'   => 'db/',
+	)
+);

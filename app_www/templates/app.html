@@ -1,0 +1,40 @@
+<ion-side-menus enable-menu-with-back-views="true">
+		<ion-side-menu side="left">
+		<ion-header-bar class="bar-stable">
+			<h1 class="title">Left MENU</h1>
+		</ion-header-bar>
+		<ion-content>
+			<ion-list>
+				
+			<ion-item menu-close ui-sref="app.lockset">
+				<i class="fa fa-cogs"> 门锁系统设置</i>
+			</ion-item>
+			<ion-item menu-close ui-sref="app.appset">
+				<i class="fa fa-home"> 手机App设置</i>
+			</ion-item>
+			<ion-item menu-close ui-sref="app.authoritySet">
+				<i class="fa fa-cog"> 开门权限设置</i>
+			</ion-item>
+			<ion-item menu-close ui-sref="app.down_blueKey">
+				<i class="fa fa-times-circle-o"> 蓝牙型应急电子钥匙权限下载</i>
+			</ion-item>
+			<ion-item menu-close ui-sref="app.openDoor">
+				<i class="fa fa-unlock"> 手机APP开门</i>
+			</ion-item>
+			<ion-item menu-close ui-sref="app.MG_record">
+				<i class="fa fa-calendar-check-o"> 报警及日志管理</i>
+			</ion-item>
+			<ion-item menu-close ui-sref="app.MC_dateRecovery">
+				<i class="fa fa-refresh"> 管理中心数据恢复控制</i>
+			</ion-item>
+			<ion-item menu-close ui-sref="app.help">
+				<i class="fa fa-handshake-o"> 帮助</i>
+			</ion-item>
+			</ion-list>
+		</ion-content>
+	</ion-side-menu>
+	<ion-side-menu-content><ion-nav-view name="menuContent" class="bg-stable"></ion-nav-view></ion-side-menu-content>
+</ion-side-menus>
+<script id="right-popover.html" type="text/ng-template">
+	
+</script>

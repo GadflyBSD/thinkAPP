@@ -1,0 +1,9 @@
+<div class="form-group" ng-class="{true: 'has-error', false: 'has-success'}[invalid]">
+	<label class="col-sm-3 control-label">{{label}}</label>
+	<div class="col-sm-5  has-feedback">
+			<input type="text" name="{{name}}" ng-model="model" class="form-control" style="width: 450px;" placeholder="请填写或选择一个任务分类" readonly required />
+			<span class="fa fa-caret-square-o-down form-control-feedback" style="right: 15px;top:15px;"></span>
+			<div class="ztree ztreeSelect" style="padding: 2px;border: 1px solid #ccc;border-radius: 3px;width: 450px;"></div>
+		<p class="help-block">{{tips}}</p>
+	</div>
+</div>

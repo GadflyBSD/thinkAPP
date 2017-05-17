@@ -1,0 +1,18 @@
+<style>
+	.col-md-1.col-sm-1{
+		height:26px;
+		line-height: 26px;
+	}
+</style>
+<div class="modal-body" id="modal-body">
+	<div id="icons">
+		<h1 ng-show="loading"><i class="fa fa-refresh fa-spin fa-lg fa-fw"></i>请等待，正在加载图标...</h1>
+		<section id="item.label" ng-repeat="item in icons">
+			<h2 class="page-header">{{item.number}} {{item.label}} in 4.7</h2>
+			<div class="row fontawesome-icon-list">
+				<div class="fa-hover col-md-1 col-sm-1" ng-repeat="vo in item.icons">
+					<a href="#" ng-click="selectedIcon(vo)"><i class="fa fa-{{vo}}"></i></a></div>
+			</div>
+		</section>
+	</div>
+</div>

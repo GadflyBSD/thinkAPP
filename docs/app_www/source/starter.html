@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">(function() {
+	var app = angular.module(&#39;starter&#39;, [&#39;ionic&#39;,
+		&#39;ngSQLite&#39;,
+		&#39;ionicLazyLoad&#39;, 
+		&#39;angular-image-404&#39;,
+		&#39;ngCordova&#39;,
+		&#39;jett.ionic.filter.bar&#39;,
+		&#39;oc.lazyLoad&#39;,
+		&#39;starter.services&#39;,
+		&#39;starter.router&#39;,
+		&#39;starter.directives&#39;
+	]);
+<span id='angular-constant'>	/**
+</span>	 * # 设置APP项目配置文件
+	 * @class angular.constant
+	 * @author GadflyBSD
+	 */
+	app.constant(&#39;configs&#39;, {
+		db_name: &#39;app_ionic.db&#39;,
+		url: {
+			restful: &#39;http://gadfly.cn/manage.php?s=/Restful/angular.html&#39;,
+			upload: &#39;http://gadfly.cn/manage.php?s=/File/uploadPicture.html&#39;,
+		},
+		state: {
+			home: &#39;app.home&#39;,
+			my: &#39;app.my&#39;,
+			login: &#39;app.login&#39;,
+			register: &#39;app.register&#39;
+		},
+		model: {
+			user: &#39;appUser&#39;
+		}
+	});
+<span id='angular-run'>	/**
+</span>	 * # RUN
+	 * @class angular.run
+	 * @author GadflyBSD
+	 */
+	app.run(function(service, $rootScope, $ionicPlatform){
+		if(!service.isInitialRun()){
+			service.sqlite({
+				type: &#39;createTableFromJson&#39;,
+				file: &#39;www/json/position.json&#39;
+			}).then(function(){
+				service.setInitialRun(true);
+			}, function(error){
+				console.log(error)
+			});
+		}
+		$ionicPlatform.ready(function () {
+			if (window.cordova &amp;&amp; window.cordova.plugins &amp;&amp; window.cordova.plugins.Keyboard) {
+				cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+				cordova.plugins.Keyboard.disableScroll(true);
+			}
+			if (window.StatusBar) {
+				StatusBar.styleDefault();
+			}
+			/*if (unit.isEmptyObject($window.localStorage.device)) {
+			 var device = $cordovaDevice.getDevice();
+			 $window.localStorage.setItem(&quot;device&quot;, JSON.stringify(device));
+			 }*/
+		});
+	});
+<span id='angular-config'>	/**
+</span>	 * # Config
+	 * @class angular.config
+	 * @author GadflyBSD
+	 */
+	app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $ionicConfigProvider) {
+		$httpProvider.defaults.headers = {
+			post: {&#39;Content-Type&#39;: &#39;application/x-www-form-urlencoded&#39;},
+			get: {&#39;Content-Type&#39;: &#39;application/x-www-form-urlencoded&#39;},
+			put: {&#39;Content-Type&#39;: &#39;application/x-www-form-urlencoded&#39;},
+			delete: {&#39;Content-Type&#39;: &#39;application/x-www-form-urlencoded&#39;}
+		}
+		$httpProvider.defaults.transformRequest = function (obj) {
+			var str = [];
+			for (var p in obj) {
+				str.push(encodeURIComponent(p) + &quot;=&quot; + encodeURIComponent(obj[p]));
+			}
+			return str.join(&quot;&amp;&quot;);
+		};
+		$ionicConfigProvider.platform.android.tabs.style(&#39;standard&#39;);
+		$ionicConfigProvider.platform.android.tabs.position(&#39;bottom&#39;);
+		$ionicConfigProvider.platform.android.navBar.alignTitle(&#39;center&#39;);
+		$ionicConfigProvider.platform.android.backButton.previousTitleText(&#39;&#39;).icon(&#39;ion-android-arrow-back&#39;);
+		$ionicConfigProvider.platform.android.views.transition(&#39;android&#39;);
+	});
+}());</pre>
+</body>
+</html>

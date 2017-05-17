@@ -1,0 +1,69 @@
+<div class="card">
+	<div class="item item-divider">
+		<h2>{{title}}</h2>
+	</div>
+	<div class="item item-text-wrap">
+		<form name="theForm" novalidate="novalidate">
+			<div class="list">
+				<div class="item">
+					<label class="item-input item-icon-right">
+						<i class="icon"
+						   ng-class="{true: 'ion-close color-assertive', false: 'ion-checkmark color-balanced'}[theForm.mobile.$invalid]"></i>
+						<input type="tel" name="mobile" ng-model="register.mobile" ng-pattern="/^1[1|3|4|5|7|8][0-9]\d{8}$/"
+						       placeholder="请填写手机号码" required>
+					</label>
+				</div>
+				<div class="item">
+					<label class="item-input w-p6 item-icon-right">
+						<i class="icon" ng-class="{true: 'ion-close color-assertive', false: 'ion-checkmark color-balanced'}[theForm.sms_code.$invalid]"></i>
+						<input type="tel" name="sms_code" ng-model="register.sms_code" ng-pattern="/^\d{6}$/" placeholder="请填写验证码" required>
+					</label>
+					<div class="w-p4">
+						<button class="button button-small button-block button-dark sendSms" ng-click="sendSms()" ng-disabled="theForm.mobile.$invalid">
+							获取验证码
+						</button>
+					</div>
+				</div>
+				<div class="item">
+					<label class="item-input item-icon-right">
+						<i class="icon ion-alert color-energized"></i>
+						<input type="text" name="nickname" ng-model="register.nickname" placeholder="请填写用户昵称">
+					</label>
+				</div>
+				<div class="item">
+					<label class="item item-input item-icon-right">
+						<i class="icon"
+						   ng-class="{true: 'ion-close color-assertive', false: 'ion-checkmark color-balanced'}[theForm.password.$invalid]"></i>
+						<input type="password" name="password" ng-model="register.password" placeholder="请设置登录密码"
+						       ng-minlength="6" ng-maxlength="20"  required>
+					</label>
+				</div>
+				<div class="item">
+					<label class="item item-input item-icon-right">
+						<i class="icon"
+						   ng-class="{true: 'ion-close color-assertive', false: 'ion-checkmark color-balanced'}[theForm.repassword.$invalid || register.password != register.repassword]"></i>
+						<input type="password" name="repassword" ng-model="register.repassword" placeholder="请再次输入密码"
+						       ng-minlength="6" ng-maxlength="20"  required>
+					</label>
+				</div>
+				<div class="padding mt20">
+					<!-- <button class="button button-block button-calm" type="submit">登录</button> -->
+					<button class="button button-calm button-block" type="submit" ng-click="submit()"
+							ng-disabled="!theForm.$valid || register.password != register.repassword">
+						注册
+					</button>
+				</div>
+			
+				<span ng-click="weixin()">
+				</span>
+				<p>你还可以通过以下方式登录</p>
+				<p class="mt10 l-ha9">
+					<a ng-click="weixin()" class="color-calm mr10"><i class="iconfont icon-weixin f32"></i> </a>
+					<!-- <a ng-click="weibo()" class="color-calm mr10"><i class="iconfont icon-weibo f26"></i> </a>
+					<a ng-click="zhifubao()" class="color-calm"><i class="iconfont icon-zhifubao f26"></i> </a> -->
+				</p>
+			
+			</div>
+		</form>
+	</div>
+</div>

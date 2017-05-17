@@ -1,0 +1,13 @@
+<div class="item">
+	<label class="item-input item-icon-right">
+		<i class="icon" ng-class="{true: 'ion-close color-assertive', false: 'ion-checkmark color-balanced'}[invalid]"></i>
+		<button class="button button-calm" modal-select ng-model="form.categoryObj"
+		        on-select="cateChange()" options="categoryList" modal-title="请选择一个任务类类型">
+			{{ model.name || &apos;请选择一个' + label + '...&apos;}}
+			<div class="option">
+				<h2>{{option.name}}</h2>
+			</div>
+		</button>
+		<input type="hidden" name="{{name}}" ng-model="model" required>
+	</label>
+</div>
