@@ -48,12 +48,13 @@
 			});
 		}
 		$ionicPlatform.ready(function () {
-			if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+			if(window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard){
 				cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 				cordova.plugins.Keyboard.disableScroll(true);
 			}
-			if (window.StatusBar) {
-				StatusBar.styleDefault();
+			if(window.StatusBar){
+				window.StatusBar.styleDefault();
+				window.StatusBar.styleLightContent();
 			}
 			/*if (unit.isEmptyObject($window.localStorage.device)) {
 			 var device = $cordovaDevice.getDevice();
